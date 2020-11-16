@@ -1,13 +1,17 @@
 # 如何比较两个浮点数
 
-> 2020/11/6
+> 2020/11/6 -> 2020/11/10
 > 
 > 夫自细视大者不尽，自大视细者不明。——《庄子·秋水》
 
-很久没写文章了，最近抽时间拼凑一篇短文，记录一下 **比较两个（二进制）浮点数是否相等** 的几种方法（虽然本文使用 C++ 演示，但原理和语言无关）。
+**比较两个浮点数是否相等** 并不是一个简单的问题：
 
-> 本文主要参考了 “浮点数专家” [Bruce Dawson](https://randomascii.wordpress.com/) 写的 [Comparing Floating Point Numbers, 2012 Edition](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/)，也推荐他 [关于浮点数的其他文章](https://randomascii.wordpress.com/category/floating-point/)（最近还一直在更新 👍）。
-> 
+- 由于 浮点数的精度误差，一般不能使用 **绝对相等** 比较；
+- 基于 **绝对误差** 的 **近似相等** 比较 要求使用者对 允许的误差范围 有明确的预期，并不通用；
+- 基于 **相对误差** 的 **近似相等** 比较 看似通用，但又可能会在 0 附近 “栽跟头”。。。
+
+本文主要参考了 “浮点数专家” [Bruce Dawson](https://randomascii.wordpress.com/) 写的 [Comparing Floating Point Numbers, 2012 Edition](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/)，也推荐他 [关于浮点数的其他文章](https://randomascii.wordpress.com/category/floating-point/)（最近还一直在更新 👍）。
+
 > 本文提到的 `Equals()` / `AlmostEqualsAbs()` / `AlmostEqualsRel()` / `AlmostEqualsUlp()` 函数的具体实现参考 [`almost_equals.h`](Comparing-Floating-Point-Numbers/almost_equals.h)（[在线演示](https://godbolt.org/z/xofPTx)）👈
 
 ## 绝对相等？不靠谱
@@ -20,27 +24,27 @@ f1 == f2  // Equals()
 
 根据 [IEEE 754 浮点数标准](https://en.wikipedia.org/wiki/IEEE_754)，浮点数 $\pm p \cdot b^e$（其中 $b$ 为 固定的基数，$\pm$ 为 符号位，$p$ 为 尾数，$e$ 为 指数）表示为 **符号位-指数-尾数** 形式：
 
-- 十进制浮点数（`b == 10`）就是 数学中常用的 [**科学计数法** _(scientific notation)_](https://en.wikipedia.org/wiki/Scientific_notation)
-- 二进制浮点数（`b = 2`）常用于 计算机中的表示和存储，其中 [单精度 _(single-precision)_](https://en.wikipedia.org/wiki/Single-precision_floating-point_format) 对应 32 位，[双精度 _(double-precision)_](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) 对应 64 位
+- **十进制浮点数**（`b == 10`）就是 数学中常用的 [**科学计数法** _(scientific notation)_](https://en.wikipedia.org/wiki/Scientific_notation)
+- **二进制浮点数**（`b = 2`）常用于 计算机中的表示和存储，其中 [**单精度** _(single-precision)_](https://en.wikipedia.org/wiki/Single-precision_floating-point_format) 对应 32 位，[**双精度** _(double-precision)_](https://en.wikipedia.org/wiki/Double-precision_floating-point_format) 对应 64 位
 
 > 在 C++ 中，`0.1` 属于 双精度浮点数，`0.1f` 属于 单精度浮点数。
 > 
 > 为什么计算机使用二进制浮点数？因为基于现有的 CPU 架构，二进制运算效率更高。
 
-虽然在数学上，任意十进制数和二进制数可以 **相互转换**，它们的 浮点数表示形式 也可以相互转换：
+虽然在数学上，实数是 **连续的** —— 任意十进制数和二进制数可以 **相互转换**，它们的 浮点数表示形式 也可以相互转换：
 
-| 十进制小数 | 十进制科学计数法 | 二进制小数 | 二进制科学计数法 |
+| 十进制定点数 | 十进制浮点数 | 二进制定点数 | 二进制浮点数 |
 |---|---|---|---|
 | `0.125` | $1.25 \times 10^{-1}$ | `0.001` | ($2^{0} + 0) \times 2^{-3}$ |
 | `0.1` | $1.0 \times 10^{-1}$ | `0.000110011...` <br/>（`0011` 循环）| $(2^{0} + 2^{-1} + 2^{-4} + 2^{-5} + ...) \times 2^{-4}$ |
 
-但是，**有限精度** 的二进制浮点数 **不能准确表示** 所有的十进制数（[在线转换工具](https://www.h-schmidt.net/FloatConverter/IEEE754.html)）：
+但是在计算机中，数值是 **离散的** —— 有限精度的 二进制浮点数 **不能准确表示** 所有的十进制数（[在线转换工具](https://www.h-schmidt.net/FloatConverter/IEEE754.html)）：
 
-- 在二进制科学计数法中，十进制数 `0.1` 的尾数 $p$ 是 `1.100110011...`（`0011` 循环）
-- 由于 32 位单精度浮点数 的尾数 $p$ 只有 23 位，所以 `1.100110011...` 只能保留小数点后 23 位，**近似表示** 为二进制的 `1.10011001100110011001101`
-- 所以，近似表示的二进制数为 `0.000110011001100110011001101`，约等于 十进制的 `0.10000000149`，导致转换 **出现误差**
+- 十进制数 `0.1` 对应的 二进制浮点数 的尾数 $p$ 是 `1.100110011...`（`0011` 循环）
+- 由于 32 位单精度浮点数 的尾数 $p$ 只有 23 位，只能保留小数点后 23 位（即 `1.10011001100110011001101`）
+- 所以，近似表示的 二进制数 `0.000110011001100110011001101` 约等于 十进制数 `0.10000000149`，出现误差
 
-**存在问题** —— **有限精度** 的浮点数 **近似表示** 会带来误差，而浮点数运算则会 **放大误差**，所以 判断两个浮点数（其中至少一个是运算结果）的 **绝对相等** 往往是不可靠的：
+**存在问题** —— **有限精度** 的浮点数转换 **近似表示** 会带来误差，而浮点数运算则会 **放大误差**，所以 判断两个浮点数（其中至少一个是运算结果）的 **绝对相等** 往往是不可靠的：
 
 ``` cpp
 float sum = 0.0f;
@@ -79,8 +83,8 @@ assert(AlmostEqualsAbs(67329.234f, 67329.242f) == false);  // expect true
 assert(AlmostEqualsAbs(1.2e-32f, 2.4e-32f) == true);       // expect false
 ```
 
-- 当比较的两个数 远大于 `1` 时，`FLT_EPSILON`/`DBL_EPSILON` 允许的误差过小（例如，虽然 `67329.234f` 和 `67329.242f` 一般被认为近似相等，但差值远大于 `FLT_EPSILON`，所以被误判为不相等）
-- 当比较的两个数 远小于 `1` 时，`FLT_EPSILON`/`DBL_EPSILON` 允许的误差过大（例如，尽管 `1.2e-32f` 和 `2.4e-32f` 相差了一倍，应该被认为不相等，但差值远小于 `FLT_EPSILON`，所以被误判为近似相等）
+- 当比较的两个数 远大于 `1` 时，`FLT_EPSILON`/`DBL_EPSILON` 允许的误差过小（例如，虽然 `67329.234f` 产生误差后会被 近似表示为 最近的下一个浮点数 `67329.242f`，但差值远大于 `FLT_EPSILON`，所以被误判为不相等 🙃）
+- 当比较的两个数 远小于 `1` 时，`FLT_EPSILON`/`DBL_EPSILON` 允许的误差过大（例如，尽管 `1.2e-32f` 和 `2.4e-32f` 相差了一倍，应该被认为不相等，但差值远小于 `FLT_EPSILON`，所以被误判为近似相等 🙃）
 
 **解决办法** —— 需要借助 **相对误差** 弥补上述局限性：
 
@@ -99,14 +103,21 @@ assert(AlmostEqualsUlp(1.2e-32f, 2.4e-32f) == false);
 fabs(f1 - f2) <= epsilon * std::max(fabs(f1), fabs(f2))  // AlmostEqualsRel()
 ```
 
+然而，这种比较方法：
+
+- 一方面 可能 **下溢** _(underflow)_ —— 如果两数的 绝对值都很小，那么乘上 epsilon 后可能得到 `0.0`，导致判断失败
+- 另一方面 **并不高效** —— 需要进行多次 **浮点数运算**（除了求绝对值外，两次比较、一次乘法、一次减法）
+
+所以，有没有更好的比较方法呢？
+
 **b)** 另一种方法是 基于浮点数二进制表示的 [ULP _(unit in the last place)_](https://en.wikipedia.org/wiki/Unit_in_the_last_place) 进行比较：
   - 根据 IEEE 754 标准，**相邻** 两个浮点数的 **二进制表示** 恰好也是相邻的 —— 相邻两个浮点数之间的距离 就是 “它们的 ULP”（定义参考：[What Every Computer Scientist Should Know About Floating-Point Arithmetic by _David Goldberg_](https://www.itu.dk/~sestoft/bachelor/IEEE754_article.pdf)）
   - 例如，距离 `1.0f` 最近的下一个浮点数是 [`nextafter(1.0f)`](https://en.cppreference.com/w/cpp/numeric/math/nextafter)，恰好等于 `1.0f + FLT_EPSILON`，所以 `ULP(1.0f)` 等于 [`FLT_EPSILON`](https://en.cppreference.com/w/cpp/types/numeric_limits/epsilon)（即 $2^{-23}$）：
 
-| 浮点数 | 二进制表示 | 二进制科学计数法 |
+| 十进制定点数 | 二进制浮点数 | 二进制表示 |
 |---|---|---|
-| `1.0f` | `0 01111111 00000000000000000000000` | $(2^{0} + 0) \times 2^{0}$ |
-| `nextafter(1.0f)` | `0 01111111 00000000000000000000001` | $(2^{0} + 2^{-23}) \times 2^{0}$ |
+| `1.0f` | $(2^{0} + 0) \times 2^{0}$ | `0 01111111 00000000000000000000000` |
+| `nextafter(1.0f)` | $(2^{0} + 2^{-23}) \times 2^{0}$ | `0 01111111 00000000000000000000001` |
 
 直观上，**比较方法** 很简单 —— 比较浮点数的 **二进制表示** 的 差值的绝对值 是否小于一个 **允许的 ULP 误差** `max_ulp`：
 
@@ -118,21 +129,26 @@ abs(Biased(Bits(f1)) - Biased(Bits(f2))) <= max_ulp  // AlmostEqualsUlp()
 - 然后，由于 这两个整数表示为 [**符号位-数值** _(sign-magnitude)_](https://en.wikipedia.org/wiki/Signed_number_representations#Signed_magnitude_representation) 格式，导致 [`+0`/`-0`](https://en.wikipedia.org/wiki/Signed_zero) 的表示形式不一致，所以需要转换为 连续范围 上的 **无符号整数**
 - 最后，再比较 两个无符号整数 **差值的绝对值** 是否小于 `max_ulp`
 
-> 另外，还需要考虑 [`+∞`/`-∞`](https://en.wikipedia.org/wiki/Infinity) 和 [`NaN` _(not a number)_](https://en.wikipedia.org/wiki/NaN) 等情况。
+相对于放缩 epsilon 的方法，这种比较方法：
 
-根据 [`gtest-internal.h`](https://github.com/google/googletest/blob/master/googletest/include/gtest/internal/gtest-internal.h)，一般 `max_ulp` 取值为 `4`：
+- 一方面 没有浮点数乘法的 下溢问题
+- 另一方面 在多数现代处理器上，运算 **效率更高**（计算 **次数更少**，[只需要进行 **整数运算**，不涉及任何 **浮点数运算**](https://stackoverflow.com/questions/2550281/floating-point-vs-integer-calculations-on-modern-hardware)）
 
+> 根据 [`gtest-internal.h`](https://github.com/google/googletest/blob/master/googletest/include/gtest/internal/gtest-internal.h)，一般 `max_ulp` 取值为 `4`：
+> 
 > The maximum error of a single floating-point operation is 0.5
 > units in the last place.  On Intel CPU's, all floating-point
 > calculations are done with 80-bit precision, while double has 64
 > bits.  Therefore, 4 should be enough for ordinary use.
+> 
+> 另外，在实际代码中，还需要处理 [`+∞`/`-∞`](https://en.wikipedia.org/wiki/Infinity) 和 [`NaN` _(not a number)_](https://en.wikipedia.org/wiki/NaN) 等情况。（测试用例 参考 [`gtest_unittest.cc`](https://github.com/google/googletest/blob/master/googletest/test/gtest_unittest.cc)）
 
 再举个例子，`4.0f` 和 它的下一个浮点数 `nextafter(4.0f)` 之间相差了 4 倍的 `FLT_EPSILON`（即 `ULP(4.0f) == 4 FLT_EPSILON`）：
 
-| 浮点数 | 二进制表示 | 二进制科学计数法 |
+| 十进制定点数 | 二进制浮点数 | 二进制表示 |
 |---|---|---|
-| `4.0f` | `0 10000001 00000000000000000000000` | $(2^{0} + 0) \times 2^{2}$ |
-| `nextafter(4.0f)` | `0 10000001 00000000000000000000001` | $(2^{0} + 2^{-23}) \times 2^{2}$ |
+| `4.0f` | $(2^{0} + 0) \times 2^{2}$ | `0 10000001 00000000000000000000000` |
+| `nextafter(4.0f)` | $(2^{0} + 2^{-23}) \times 2^{2}$ | `0 10000001 00000000000000000000001` |
 
 [align-center]
 
@@ -154,7 +170,10 @@ assert(AlmostEqualsRel(FLT_EPSILON, 0.0f) == false);  // expect true
 assert(AlmostEqualsUlp(FLT_EPSILON, 0.0f) == false);  // expect true
 ```
 
-即使放大允许的误差范围，也不一定可行 —— 因为和 0 比起来，相对误差还是太大了 —— 在这种情况下，基于相对误差的比较方法 往往是 **没有实际意义** 的：
+- 虽然 `nextafter(1.0f)` 和 `1.0f` 相差 `FLT_EPSILON`，**两者近似相等**
+- 但是 `FLT_EPSILON`（即 `nextafter(1.0f) - 1.0f`）和 0 相比，**并不近似相等** 🙃
+
+即使放大允许的误差范围，也不一定可行 —— 因为和 0 比起来，“相对误差” 还是太大了 —— 在这种情况下，基于相对误差的比较方法 往往是 **没有实际意义** 的：
 
 ``` cpp
 assert(AlmostEqualsRel(FLT_EPSILON, 0.0f, 0.1f) == false);  // expect true
@@ -194,13 +213,13 @@ assert(AlmostEqualsUlp<double>(0.1f, 0.1, FLT_EPSILON / DBL_EPSILON) == true);
 assert(Equals(static_cast<float>(0.1), 0.1f) == true);
 ```
 
-另外，由于精度的限制，两个 **非常接近**（相差 `0 ULP`）的十进制数 **字面量** _(literal)_，只能表示为 相同的二进制数：
+另外，由于精度的限制，两个 **非常接近**（相差 `0 ULP`）的 十进制定点数 **字面量** _(literal)_，只能表示为 相同的 二进制浮点数：
 
 ``` cpp
 assert(Equals(67329.234f, 67329.235f) == true);  // expect false
 ```
 
-## 写在最后 [no-toc]
+## 写在最后
 
 [Bruce Dawson 的总结是 “没有银弹”](https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/) —— 在比较两个浮点数是否近似相等时，需要根据具体场景，选择更合适的比较方法：
 
@@ -210,7 +229,7 @@ assert(Equals(67329.234f, 67329.235f) == true);  // expect false
 - 如果 要比较的 两个浮点数 **都不是 0**
   - 一般使用更通用的 **相对误差**
   - 但如果能 **提前判断** 允许的误差范围，也可以使用 **绝对误差**
-- 所以，并不存在 判断 **任意** 两个浮点数 的通用方法 🙃
+- 所以，**并不存在** 判断 **任意** 两个浮点数 的通用方法 🙃
 
 现实世界也一样 ——
 

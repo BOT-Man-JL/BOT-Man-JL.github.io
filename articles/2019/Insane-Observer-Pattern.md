@@ -1,4 +1,4 @@
-﻿# 令人抓狂的观察者模式
+# 令人抓狂的观察者模式
 
 > 2019/1/30 -> 2020/2/3
 > 
@@ -215,6 +215,8 @@ class Bakery : public FarmObserver {
   Farm* farm_ = nullptr;
 };
 ```
+
+当然，这种做法会导致 `Bakery` 依赖于 `Farm`，从而产生 **耦合**。
 
 假设 farm_ 对象失效了，导致 `~Bakery()` 调用的 `RemoveObserver()` 可能出现异常。
 

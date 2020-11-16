@@ -1,6 +1,6 @@
 ﻿# C++ 反汇编笔记
 
-> 2019/8/11
+> 2019/8/11 -> 2020/11/9
 > 
 > 博观而约取，厚积而薄发。—— 苏轼
 
@@ -286,28 +286,6 @@
 
 ## C++ 面向对象
 
-### 对象内存布局 _(Object Memory Layout)_
-
-- 标准布局 _(standard layout)_：兼容 C 语言数据类型（Plain Old Data _(POD)_）
-- （基）类布局：`[虚表指针 (opt)]-[数据成员-...]`
-- 派生类布局：`[基类布局-...]-[数据成员-...]`
-- 对于 继承 _(inheritance)_ 和 组合 _(composition)_ 的内存布局一致
-- 对于空类，（成员）变量占用 1-byte 空间，空基类不占用空间（Empty Base Optimization _(EBO)_）
-- 连续内存，x86 程序按照 4-byte 对齐
-
-### 虚函数表 _(Virtual Function Table)_
-
-- 基类布局：`[类型信息指针 (opt)]-[基类的虚函数指针-...]`
-- 派生类布局：`[类型信息指针 (opt)]-[重写的虚函数指针-...]-[派生类独有的虚函数指针-... (opt)]`
-- 如果禁用 Run-Time Type Information _(RTII)_，则没有类型信息指针
-- 对于纯虚函数，虚函数指针指向 `_purecall`
-
-### 虚函数调用 _(Virtual Function Call)_
-
-- `lea ecx, [OBJ+n]` 存入对象 `OBJ` 在偏移 `n` 后的基类 this 指针
-- `mov eax, [ecx]` 取出基类 this 指针对应的虚表指针
-- `call dword ptr [eax+n]` 调用虚表的偏移 `n` 对应的虚函数
-
 ### 构造函数 _(Constructor)_ / 析构函数 _(Destructor)_
 
 - 实现方式：
@@ -324,18 +302,50 @@
   - 否则如果调用派生类的虚函数，但派生类的数据成员 未构造或已析构，会导致崩溃
 - [基类的析构函数 必须声明为 虚函数](../2020/Conventional-Cpp.md#Virtual-Destructors)
 
+### 对象内存布局 _(Object Memory Layout)_
+
+- 标准布局 _(standard layout)_：兼容 C 语言数据类型（Plain Old Data _(POD)_）
+- （基）类布局：`[虚表指针 (opt)]-[数据成员-...]`
+- 派生类布局：`[基类布局-...]-[数据成员-...]`
+- 对于非空类，继承 _(inheritance)_ 和 组合 _(composition)_ 的内存布局一致
+- 对于空类，成员变量占用 1-byte 空间，空基类不占用空间（Empty Base Optimization _(EBO)_）
+- 连续内存，x86 程序按照 4-byte 对齐
+
+### 虚函数表 _(Virtual Function Table)_
+
+- 基类布局：`[类型信息指针 (opt)]-[基类的虚函数指针-...]`
+- 派生类布局：`[基类到派生类的偏移量 (opt)]-[类型信息指针 (opt)]-[基类的虚函数指针-...]-[其他基类的、派生类独有的虚函数指针-... (opt)]`
+- [clang](https://godbolt.org/z/faKcM8)/[gcc](https://godbolt.org/z/qW4WGd) 布局：
+  - 如果 派生类没有 多重继承，则 `offset_to_top` 为 0；否则小于 0
+  - 如果禁用 Run-Time Type Information _(RTTI)_，则 `typeinfo_ptr` 字段为 0
+- [msvc](https://godbolt.org/z/8WYr4e) 布局：
+  - 不包含 `offset_to_top` 字段
+  - 如果禁用 RTTI，不包含 `typeinfo_ptr` 字段
+- 虚表指针 指向第一个 基类的虚函数指针 的地址（跳过开头的 `offset_to_top` 和 `typeinfo_ptr`）
+- 对于纯虚函数，虚函数指针指向 `_purecall`
+
+### 虚函数调用 _(Virtual Function Call)_
+
+- `lea ecx, [OBJ+n]` 存入对象 `OBJ` 在偏移 `n` 后的基类 this 指针（内存访问：STACK/HEAP -> HEAP）
+- `mov eax, [ecx]` 取出基类 this 指针对应的虚表指针（内存访问：HEAP -> DATA）
+- `call dword ptr [eax+n]` 调用虚表的偏移 `n` 对应的虚函数（内存访问：DATA -> TEXT）
+
 ### 多重继承 _(Multiple Inheritance)_
 
 - 虚表：
   - 派生类的虚表个数 = 有虚表的基类个数
-  - 派生类独有的虚函数指针 只追加到 第一个基类 的虚表后
+  - 第一个基类的虚表 包含 派生类所有的 虚函数指针（其他基类的、派生类独有的 虚函数指针 往后追加）
+  - 其他基类的虚表 只包含 当前基类的 虚函数指针
 - 派生类指针 调用 基类虚函数
-  - 向上转换 _(up cast)_：派生类地址 需要向后 `+n` 偏移到 基类地址（若已是基类地址，则不需要）
-  - 非虚转换 _(non-virtual thunk)_：
-    - 由于 重写的虚函数里 this 指针指向派生类，调用前 基类地址 需要向前 `-n` 还原为 派生类地址
-    - 虚表 中对应的 虚函数指针 指向一个自动生成的函数 `sub PTR n; jmp IMP`，先进行 向下转换 _(down cast)_，再调用 重写的虚函数
-  - 对于第一个基类，`n == 0` 地址相同，不需要向上转换，也不会生成 非虚转换 函数
-  - 对于非第一个基类，需要先检查 指针是否为空（第一个基类不需要检查）
+  - [clang](https://godbolt.org/z/faKcM8)/[gcc](https://godbolt.org/z/qW4WGd) 非虚转换 _(non-virtual thunk)_：
+    - 由于 重写的虚函数里 this 指针指向 派生类，调用前 基类指针 需要 向下转换 _(down cast)_（向前 `-n`）还原为 派生类指针，再调用 重写的虚函数
+    - 虚表 中对应的 虚函数指针 指向一个自动生成的函数 `add PTR -n; jmp IMP`，先向下转换 `PTR`，再跳转到 `IMP`
+    - 当然，如果使用 派生类指针 调用该虚函数，不需要转换
+  - [msvc](https://godbolt.org/z/8WYr4e) 直接调用：
+    - 由于 重写的虚函数里 this 指针指向 对应的基类，调用前 基类指针 不需要转换
+    - 然而，如果使用 派生类指针 调用该虚函数，需要先 向上转换 _(up cast)_（向后 `+n`）偏移到 基类指针
+  - 对于第一个基类，`n == 0` 地址相同，不需要向上转换/向下转换（也不会生成 非虚转换 函数）
+  - 对于非第一个基类，clang/msvc 会先 检查指针是否为空
 
 ### 虚继承 _(Virtual Inheritance)_
 
@@ -377,7 +387,7 @@
 
 - 《C++ 反汇编与逆向分析技术揭秘》钱林松 赵海旭
 - 《软件调试》张银奎
-- [图说 C++ 对象模型：对象内存布局详解 - melonstreet](https://www.cnblogs.com/QG-whz/p/4909359.html)
+- [C++ 中虚函数、虚继承内存模型 - Holy Chen](https://zhuanlan.zhihu.com/p/41309205)
 - [使用 Windbg 分析 C++ 的虚函数表原理 - bingoli](https://bingoli.github.io/2019/03/27/windbg-multi-inherit/)
 - [使用 Windbg 分析 C++ 的多重继承原理 - bingoli](https://bingoli.github.io/2019/03/21/virtual-table-by-windbg/)
 - [Dance In Heap（一）：浅析堆的申请释放及相应保护机制 - hellowuzekai](https://www.freebuf.com/articles/system/151372.html)

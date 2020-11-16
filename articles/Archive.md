@@ -6,7 +6,7 @@
 #### 2020
 
 - [如何 比较两个 浮点数](2020/Comparing-Floating-Point-Numbers.md)
-- [C/C++ 宏编程 的艺术](2020/Macro-Programming-Art.md)（**荐**）
+- [C/C++ 宏编程 的艺术](2020/Macro-Programming-Art.md) 👍
 - [无锁 双缓冲 算法](2020/Lock-Free-Double-Buffer.md)
 - [无锁编程 与 惯性思维](2020/Lock-Free-and-Inertial-Thinking.md)
 
@@ -14,19 +14,19 @@
 
 - [再谈 “回调 vs 接口” 设计](2019/Callback-vs-Interface-Explained.md)
 - [Python 风格的函数式](2019/Pythonic-Functional.md)
-- [漫谈 C++ 的各种 检查](2019/Cpp-Check.md)（**荐**）
-- [从 时空维度 看 I/O 模型](2019/IO-Models.md)（**荐**）
-- [深入 C++ 回调](2019/Inside-Cpp-Callback.md)（**荐**）
+- [漫谈 C++ 的各种 检查](2019/Cpp-Check.md) 👍
+- [从 时空维度 看 I/O 模型](2019/IO-Models.md) 👍
+- [深入 C++ 回调](2019/Inside-Cpp-Callback.md) 🔥
 - [令人抓狂的 观察者模式](2019/Insane-Observer-Pattern.md)
 - [对 编程范式 的简单思考](2019/Thinking-Programming-Paradigms.md)
 
 #### 2018
 
-- [简单的 C++ 结构体字段 反射](2018/Cpp-Struct-Field-Reflection.md)（**荐**）
+- [简单的 C++ 结构体字段 反射](2018/Cpp-Struct-Field-Reflection.md) 🔥
 - [C++ 引用在 函数式编程 中的应用](2018/Cpp-Reference-in-Functional.md)
 - [高阶函数：消除循环和临时变量](2018/Higher-Order-Functions.md)
 - [~~不推荐使用 微信小程序~~](2018/NOT-Wechat-App.md)
-- [深入浅出 C++ 11 右值引用](2018/Cpp-Rvalue-Reference.md)（**荐**）
+- [深入浅出 C++ 11 右值引用](2018/Cpp-Rvalue-Reference.md) 👍
 - [匿名通信 Windows 客户端的设计与实现](2018/Anonymous-Communication-Client-Design.md)
 - [从 Windows Filtering Platform 学习 TCP/IP（2）](2018/Learn-TCP-IP-from-WFP-2.md)
 - [从 Windows Filtering Platform 学习 TCP/IP（1）](2018/Learn-TCP-IP-from-WFP-1.md)
@@ -45,7 +45,7 @@
 - [两个提高 服务灵活性 的途径](2017/Improve-Flexibility.md)
 - [如何优雅的把 命令行界面 Hack 到 Qt 界面](2017/Hack-Qt-GUI.md)
 - [如何浅显的解释 回调函数](2017/Callback-Explained.md)
-- [浅谈 C++ 元编程](2017/Cpp-Metaprogramming.md)（**荐**）
+- [浅谈 C++ 元编程](2017/Cpp-Metaprogramming.md) 🔥
 - [图聚类 算法研究](2017/Graph-Clustering-Study.md)
 - [关于 可扩展性 的思考](2017/Thinking-Scalability.md)
 
@@ -60,7 +60,7 @@
 
 #### 2020
 
-- [聊聊 C++ 的优雅写法](2020/Conventional-Cpp.md)（**荐**）
+- [聊聊 C++ 的优雅写法](2020/Conventional-Cpp.md) 🔥
 
 #### 2019
 
@@ -115,12 +115,12 @@
 #### 2018
 
 - [泰国假日](2018/Holiday-in-Thailand.md)
-- [咖啡、酒精、牛奶、花茶](2018/Drinks.md)（**荐**）
+- [咖啡、酒精、牛奶、花茶](2018/Drinks.md) 👍
 - [旅行归来](2018/Back-from-a-Tour.md)
 
 #### 2017
 
-- [代码之美](2017/Beauty-of-Code.md)（**荐**）
+- [代码之美](2017/Beauty-of-Code.md) 👍
 - [简单的思考生活](2017/Thinking-Life.md)
 - [如何使用英文搜索](2017/How-to-Search-English.md)
 - [~~我们学习，都在学什么~~](2017/Thinking-College.md)
@@ -140,7 +140,7 @@
 
 ## 其他 | Miscellaneous
 
-- [搜集的哲言](misc/Quotes.md)（**荐**）
+- [搜集的哲言](misc/Quotes.md) 👍
 - [读过的书](misc/Books-Read.md)
 - [装机必备](misc/Softwares-Must-Have.md)
 - [二维码生成器](misc/QR-Code-Generator.md)

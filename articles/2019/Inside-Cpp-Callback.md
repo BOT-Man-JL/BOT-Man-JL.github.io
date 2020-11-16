@@ -1,4 +1,4 @@
-﻿# 深入 C++ 回调
+# 深入 C++ 回调
 
 > 2019/3/21 -> 2020/7/7
 > 
@@ -240,6 +240,7 @@ FetchImageAsync(
 > 
 > - 写在成员函数后的 **引用限定符** _(reference qualifier)_ `&&` / `const &`，区分 在对象处于 非 const 右值 / 其他 状态时的成员函数调用
 > - `base::RepeatingCallback` 也支持 `R Run(Args...) &&` 调用，调用后也进入失效状态
+> - 根据 [Google C++ Style Guide](https://google.github.io/styleguide/cppguide.html#Operator_Overloading)，这里使用 `Run(...)`，而不是 `operator()(...)`
 
 ### 为什么要区分一次和多次回调
 

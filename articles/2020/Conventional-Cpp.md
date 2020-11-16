@@ -643,13 +643,20 @@ try {
 >   - 抛出异常的类型 不能在 编译时检查 🙃
 >   - 难以确定 抛出来源（默认只有 `.what()`，没有 `.stack()`）
 >     - 例如 隐式转换 [`std::string detail = json_object;`](https://github.com/nlohmann/json#implicit-conversions)（忘了加 `.dump()`）抛出异常 `[json.exception.type_error.302] type must be string, but is object`
->     - 因为 一般认为此处不会抛异常，但又被外层 `try-catch` 捕获，导致无法定位来源（例如 [gcc8 前的 `std::thread` 存在这个问题](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55917)），而只有 未捕获的异常 崩溃时可以看到调用栈（可用 `noexcept` 提前崩溃，避免异常继续传递）
+>     - 因为 一般认为此处不会抛异常，但又被外层 `try-catch` 捕获，导致无法定位来源（例如 [gcc8 前的 `std::thread` 存在这个问题](https://gcc.gnu.org/bugzilla/show_bug.cgi?id=55917)），而只有 未捕获的异常 崩溃时可以看到调用栈（可用 `noexcept` 提前崩溃，实现 [fail-fast](https://en.wikipedia.org/wiki/Fail-fast)，避免异常继续传递）
 >     - 另外 上层逻辑往往不希望看到 最原始的异常，而希望拿到 更有意义的异常（例如 `type of |json_object| must be string, but is object`）
->   - 容易混淆 异常 和 错误
+>   - 容易混淆 “异常” 和 “错误”
 >     - 例如 `const Value& Path::resolve(const Value& root) const;` 可能 [抛异常](https://github.com/open-source-parsers/jsoncpp/blob/7165f6ac4c482e68475c9e1dac086f9e12fff0d0/src/lib_json/json_value.cpp#L1417)，也可能 [返回 null 的 singleton 引用](https://github.com/open-source-parsers/jsoncpp/blob/ddabf50f72cf369bf652a95c4d9fe31a1865a781/src/lib_json/json_value.cpp#L1597)
->   - 容易混淆 异常 和 契约（参考：[sec|Contracts]）
+>     - 如果要用 “异常” 表示 “错误”，则需要保证 事务性 _(transactional)_（例如 I/O 操作执行过程中 如果可能抛出异常，代码实现需要隔离 “提交/回滚” 阶段）
+>     - 尽管使用 RAII 可以避免部分问题（参考：[sec|RAII]），但仍需要 被调方 严格明确 [异常安全等级 _(exception safety)_](https://en.cppreference.com/w/cpp/language/exceptions#Exception_safety)、调用方 严格遵守 使用规范
+>   - 容易混淆 “异常” 和 “契约”（参考：[sec|Contracts]）
 >     - [ES.105: Don’t divide by zero](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Res-zero)
-> - 正方观点：[NR.3: Don’t avoid exceptions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rnr-no-exceptions)
+>   - 不支持 并发编程模型（栈回退 _(stack unwinding)_ 仅用于串行控制流）
+>   - [The Error Model - Joe Duffy](http://joeduffyblog.com/2016/02/07/the-error-model/)（[译文](https://dontpanic.blog/the-error-model/)）
+>   - [Exception Handling Considered Harmful - Jason Robert Carey Patterson](http://www.lighterra.com/papers/exceptionsharmful/)
+> - 正方观点：
+>   - [NR.3: Don’t avoid exceptions](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rnr-no-exceptions)
+>   - [Exceptions and Error Handling | C++ FAQ](https://isocpp.org/wiki/faq/exceptions)
 
 ---
 
@@ -1027,6 +1034,10 @@ const Map foo_map = [] {
 ---
 
 ### Q & A [no-toc]
+
+[align-center]
+
+> [![xkcd: Standards](Conventional-Cpp/standards.png)](https://xkcd.com/927/)
 
 <br/>
 <br/>

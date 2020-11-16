@@ -161,15 +161,15 @@
 
 ## 模式
 
-- Host/Manager
+- Manager
   - 管理器对象
   - 管理其他对象的生命周期
-- Host/Proxy
+- Host/Proxy/Stub
   - 代理对象
   - 不直接处理实际逻辑
 - Impl
   - 实现对象
-  - 处理实际逻辑，但一般不被直接调用（中间有 Host/Proxy）
+  - 处理实际逻辑，但一般通过接口调用
 - Provider
   - 抽象工厂
   - 生成不同抽象类的实现
@@ -185,6 +185,9 @@
 - Observer
   - 行为依赖注入
   - 一个触发者，多个关注者，若干个事件（例如 状态变化）
+- Controller
+  - 解耦 Model 和 View
+  - 操作/观察 Model，帮助 View 处理业务逻辑
 - pImpl
   - 前置声明实现对象，只保存实现对象的 `std::unique_ptr`
   - 要求：不能在头文件中 inline 析构函数，因为在析构函数定义时实现对象没有定义

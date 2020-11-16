@@ -1,6 +1,6 @@
 # C/C++ 宏编程的艺术
 
-> 2020/6/30 -> 2020/7/6
+> 2020/6/30 -> 2021/1/1
 > 
 > 可以言传者，物之粗也；可以意致者，物之精也。——《庄子·秋水》
 
@@ -482,6 +482,25 @@ PP_FOR_EACH(DO_EACH, bool, x)       // -> bool x
 log("%d%f", 1, .2);    // -> printf("LOG: %d%f", 1, .2);
 log("hello world");    // -> printf("LOG: hello world");
 log("hello world", );  // -> printf("LOG: hello world");
+```
+
+另外，如果不需要处理 **多余逗号** 的问题，也可以用 **依赖注入** 的方法遍历变长参数（例如 [node.js 常用这个技巧展开代码](https://github.com/nodejs/node/blob/51b43675067fafaad0abd7d4f62a6a5097db5044/src/node_types.cc#L14)）：
+
+``` cpp
+#define VALUE_METHOD_MAP(V) \
+  V(External)               \
+  V(Date)                   \
+  V(ArgumentsObject)        \
+  ...
+
+void RegisterTypesExternalReferences(ExternalReferenceRegistry* registry) {
+#define V(type) registry->Register(Is##type);
+  VALUE_METHOD_MAP(V)
+#undef V
+
+  registry->Register(IsAnyArrayBuffer);
+  registry->Register(IsBoxedPrimitive);
+}
 ```
 
 ### 符号匹配

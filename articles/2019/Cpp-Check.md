@@ -116,7 +116,7 @@ Chromium/base 的单元测试文件 [`thread_annotations_unittest.nc`](https://g
 
 ## 运行时检查
 
-运行时动态检查，主要基于 Chromium/base 库提供的 **断言 `DCHECK`/`CHECK`** 实现 —— 如果断言失败，运行着的程序会立即终止。
+运行时动态检查，主要基于 Chromium/base 库提供的 **断言 `DCHECK`/`CHECK`** 实现 —— 如果断言失败，运行着的程序会立即终止，通过 [fail-fast](https://en.wikipedia.org/wiki/Fail-fast) 暴露问题所在。
 
 其中，`DCHECK` 只对 调试版 _(debug)_ 有效，而 `CHECK` 也可用于 发布版 _(release)_ —— 从而避免在发布版进行 无用的检查。
 
@@ -153,9 +153,11 @@ C++ 的数值类型，都是固定大小的 [标量类型](https://en.cppreferen
 
 #### 线程安全检查
 
-很多时候，某个对象只会在 **同一线程/序列** 中 **创建/访问/销毁**：
+说到 **线程安全** _(thread-safety)_，很多人会想到通过 **互斥访问** _(mutual exclusion)_ 等方式保证；然而，随意引入 缺乏考虑的 互斥锁，容易导致 **死锁** 等问题（尽管也能进行 [sec|死锁检查]）。
 
-- 正常情况下，**无竞争** _(contention-free)_ 模型没必要保证 **线程安全** _(thread-safety)_，因为 线程同步操作/原子操作 会带来 **不必要的开销**
+更安全的做法是 —— 只允许某个对象在 **同一线程/序列** 中 **创建/访问/销毁**：
+
+- 正常情况下，**无竞争** _(contention-free)_ 模型没必要保证线程安全，因为 线程同步操作/原子操作 会带来 **不必要的开销**
 - 异常情况下，一旦被 多线程同时使用，访问冲突导致 **数据竞争** _(data race)_，可能出现 未定义行为
 
 为此，Chromium 借助 [`base::ThreadChecker`](https://github.com/chromium/chromium/blob/master/base/threading/thread_checker.h)/[`base::SequenceChecker`](https://github.com/chromium/chromium/blob/master/base/sequence_checker.h) **检查对象是否只在 同一线程/序列 中使用**：
@@ -203,7 +205,7 @@ C++ 的数值类型，都是固定大小的 [标量类型](https://en.cppreferen
 
 #### 死锁检查
 
-Chromium 通过 [`base::internal::CheckedLock`](https://github.com/chromium/chromium/blob/master/base/task/common/checked_lock.h) 检查 死锁 _(deadlock)_。
+Chromium 通过 [`base::internal::CheckedLock`](https://github.com/chromium/chromium/blob/master/base/task/common/checked_lock.h) 检查 **死锁** _(deadlock)_。
 
 实现的 **核心思想** 非常简单 —— **检查等待链是否成环**：
 
