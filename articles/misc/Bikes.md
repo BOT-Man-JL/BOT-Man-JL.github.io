@@ -1,10 +1,10 @@
 # 我的自行车
 
-> ¥19286.59
+> ¥19485.09
 
 ## GIANT ATX 830
 
-> ¥4292.58
+> ¥4320.58
 
 - [ATX 830 自行车 (S)](https://item.jd.com/10022275555172.html) ¥2498（捷安特农大店，送 脚撑、水壶架）
 - [RBRL 挡泥板 (RL-870)](https://item.jd.com/2554508.html) ¥100（捷安特农大店）
@@ -22,7 +22,8 @@
 - [Prowheel 24-34-42T 牙盘 (AD43)](https://www.amazon.com/Prowheel-mountain-24-34-42T-aluminum-universal/dp/B0719FN2PS) ¥158（捷安特回龙观店，质量较差）
 - 杂牌脚撑 ¥78（捷安特回龙观店，质量极差）
 - 杂牌碟刹刹车片 ¥40（捷安特回龙观店，刹车力极差）
-- TEKTRO E10.11 来令片 ¥28（拼多多）
+- [TEKTRO E10.11 来令片](https://tektro.com/en/product/136) ¥28（拼多多）
+- [Shimano RT26 160mm 刹车盘片](https://bike.shimano.com/en-US/product/component/tourney-tx800/SM-RT26.html) ¥28（拼多多）
 - [GIANT 内胎 (27.5X1.9/2.125 FV 48mm)](https://item.jd.com/11780040546.html) ¥40（捷安特北土城西路店）
 - [正新 内胎 (27.5X1.9/2.125 FV 48mm)](https://item.jd.com/100016810965.html) ¥35（捷安特北四环中路店，不带换）
 - [Shimano 44-32-22T 牙盘 (FC-MT210-3) + 中轴 (BB-MT500)](https://bike.shimano.com/zh-CN/product/component/alivio-m3100/FC-MT210-3.html) ¥500（捷安特沙河店）
@@ -34,7 +35,7 @@
 
 ## VAN RYSEL RCR AF
 
-> ¥7870.87
+> ¥7871.77
 
 - [VAN RYSEL RCR AF 自行车 (XS)](https://item.jd.com/10026493905195.html) ¥5499（闲鱼，送 TRIBAN 500 水壶架）
 - [ZERAY EY112 锁鞋 (41.5) + ZP112 锁踏](https://item.taobao.com/item.htm?id=670179788372) ¥219（淘宝）
@@ -53,18 +54,19 @@
 - [VAN RYSEL FASTFLOW 骑行水壶 (XL 950 ML)](https://www.decathlon.com.cn/zh/p/950-ml-xl-cycling-water-bottle-fastflow/_/R-p-329246) ¥59.9（迪卡侬）
 - [DECATHLON 法式气嘴内胎 (700X23/32 60MM)](https://www.decathlon.com.cn/zh/p/700x23-32-60-mm-presta-valve-inner-tube/_/R-p-306878) ¥19.9 + ¥19.9 + ¥19.9 + ¥19.9（迪卡侬，同事用掉一条 & 放尾包里破了一条 & 318 前换上一条 & 318 上爆掉一条）
 - [BTWIN Protect Light Flex Bead ETRTO 折叠外胎 (700x28)](https://www.decathlon.com.cn/product-detail?dsm_code=309450&model_code=8551728) ¥129.9（迪卡侬）
+- DECATHLON 11 速链条 TODO（京东）
 - [Continental Grand Sport Race 散装白标折叠外胎 (700x25)](https://item.jd.com/10082384468435.html) ¥100（拼多多）
-- [BARADINE 470TC 刹车皮](https://item.jd.com/10068138977990.html) ¥78 + ¥78（巴塘巅峰户外，装歪了）
+- [BARADINE 470TC 刹车皮](https://item.jd.com/10068138977990.html) ¥78 + ¥78（巴塘巅峰户外）
 - 杂牌水壶架 ¥3.89（拼多多）
 - 杂牌 iGPSPORT 支架 GoPro 下挂转换头 ¥18（淘宝）
 - 杂牌曲柄保护套 ¥4.58（拼多多）
 - 杂牌三合一停车架 ¥34.8（拼多多）
 - 杂牌 WOTEK 车铃 ¥7.5（拼多多，闲置）
-- 迪卡侬工作室大保养 ¥299（迪卡侬）
+- 迪卡侬工作室大保养 ¥299.9（迪卡侬）
 
 ## Riverside 100
 
-> ¥1272.43
+> ¥1442.03
 
 - [RIVERSIDE 100 自行车 (S)](https://www.decathlon.com.cn/zh/p/hyc-100-riv-cn-matt/_/R-p-145690) ¥889.9（迪卡侬，微信支付 899 减 110）
 - [BTWIN 100 撑脚架](https://www.decathlon.com.cn/zh/p/kickstand-100/_/R-p-331631) ¥49.9（迪卡侬）
@@ -72,7 +74,11 @@
 - [ELOPS 100 24-28寸 自行车车篮架](https://www.decathlon.com.cn/zh/p/100-24-28-bike-pannier-rack/_/R-p-187311) ¥69.9 + ¥69.9（迪卡侬，坏了一套）
 - [DECATHLON 美式气嘴内胎 (700X35/45 48MM)](https://www.decathlon.com.cn/zh/p/700x23-32-60-mm-presta-valve-inner-tube/_/R-p-306878) ¥19.9（迪卡侬）
 - [DECATHLON 100 通用V刹刹车块](https://www.decathlon.com.cn/product-detail?dsm_code=335&model_code=3256737) ¥19.9（迪卡侬）
+- [DECATHLON 3-8 速链条](https://www.decathlon.com.cn/product-detail?dsm_code=331640) ¥59.9（迪卡侬）
+- 西三旗店更换内胎 ¥9.9（迪卡侬）
 - 张飞帮忙换福条 ¥0（迪卡侬）
+- 西三旗店更换链条 ¥29.9（迪卡侬）
+- 西三旗店校正轮圈 ¥69.9（迪卡侬）
 - 杂牌手机支架 ¥8.9（拼多多）
 - 杂牌车框 ¥16.53（拼多多）
 - 杂牌车铃 ¥7.8（拼多多）
@@ -125,3 +131,4 @@
 - [DELI 活动扳手 8 寸 (DL008A)](https://item.jd.com/7434946.html) ¥13.52（拼多多）
 - [公牛 电工胶带（9 米）](https://item.jd.com/5464826.html) ¥1.9（拼多多）
 - 杂牌扎带 1.8mm 20cm (x250) ¥3.71（拼多多）
+- 杂牌铁丝 TODO（拼多多）
