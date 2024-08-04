@@ -140,6 +140,10 @@
 
 ## 生活 | Life
 
+#### 2024
+
+- [泰国假日 3](2024/Holiday-in-Thailand-3.md)
+
 #### 2023
 
 - [马来西亚假日](2023/Holiday-in-Malaysia.md)

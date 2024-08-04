@@ -102,7 +102,7 @@
 - 国际航班两次安检，最严格的一次在登机口附近（注意规划时间，本次航班因为安检没结束导致延误了一会）
 - 在 KT 机场看到 Air Asia 称重行李箱，而 Malaysia Airlines 没人称重
 - KL 机场可自助打印登机牌，避免排队（不清楚柜台 Malaysia Airlines 是否称重）
-- 晚上在 KL 机场（国际出发安检后的 Golden Lounge）吃晚餐（信用卡兑换 2h）
+- 晚上在 KLIA T1（国际出发安检后的 Golden Lounge）吃晚餐（信用卡兑换 2h）
 
 ## Pulau Redang
 

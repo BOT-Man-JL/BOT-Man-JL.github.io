@@ -1,25 +1,25 @@
 # C++ Code Review 关注点
 
-> 2021/12/31
+> 2021/12/31 -> 2023/12/16
 > 
-> 本文提到的问题“必须”修复，不要包含“建议”修改的条目。
+> 本文可作为 Code Review Checklist。
 
 [TOC]
 
 ## 通用问题
 
-### 格式错误
+### 格式/命名错误
 
 ``` cpp
 #include "base/config.h"
 #include <memory>
 
-#include "xxx/ui/views/controls/yyy.h"
+#include "xxx/controls/yyy.h"
 #include "base/config.h"
 
-namespace xxx {
-    void Function() {
-        // ...
+namespace XXX {
+    void yyyFoo() {
+        auto Var_ZZZ = 1;
     }
 }
 ```
@@ -28,7 +28,7 @@ namespace xxx {
 
 ### 大范围格式化已有代码
 
--> 拆分单独 commit 合入
+-> 拆分单独 commit 提交
 
 ### 模块设计不合理
 
@@ -154,6 +154,57 @@ if (ThemeManager::GetTheme() == Theme::kDark) {
 #endif
   UseConfig(config);
 ```
+
+### 回调无法执行
+
+``` cpp
+std::map<int64_t, Time> g_timestamp;
+
+g_timestamp.emplace(request_id, Time::Now());
+Framework::SendRequest(..., base::Bind(&HandlePayload));
+
+void HandlePayload(const Payload& payload) {
+  // Use |payload| and |timestamp| ...
+  g_timestamp.erase(payload.request->id);
+}
+
+void Framework::OnResponse(PayloadCallback callback,
+                           const Response& response) {
+  if (!response.succeeded)
+    return;
+  callback.Run(response.payload);
+}
+```
+
+-> （框架）增加失败处理回调路径
+
+``` cpp
+void OnResponse(SuccCallback succ_callback,
+                FailCallback fail_callback,
+                const Response& response) {
+  if (!response.succeeded) {
+    fail_callback(response.error_code);
+    return;
+  }
+  succ_callback.Run(response.payload);
+}
+
+void HandleFailed(Response::ErrorCode error_code) {
+  g_timestamp.erase(payload.request->id);
+}
+```
+
+-> （业务）回调函数绑定上下文数据，避免额外存储
+
+``` cpp
+SendRequest(..., base::Bind(&HandlePayload, Time::Now()));
+
+void HandlePayload(Time timestamp, const Payload& payload) { ... }
+```
+
+### 初始化顺序依赖
+
+单例之间、成员变量之间
 
 ### 误用 DCHECK/CHECK
 
@@ -502,13 +553,14 @@ class Foo {
 };
 ```
 
-### 指针/可选/回调/protobuf 判空
+### 指针/可选/回调/protobuf/字符串 判空
 
 ``` cpp
 p->foo();
 p->foo()->bar();
 auto v = opt.value();
 callback.Run(...);
+std::string str = const_char_ptr;
 ```
 
 ->
@@ -528,6 +580,7 @@ auto v = opt.value_or(...);  // eager evaluation!
 if (callback) {
   callback.Run(...);
 }
+std::string str = const_char_ptr ? const_char_ptr : "";
 ```
 
 ### 除零判断
@@ -665,8 +718,7 @@ auto label = CreateLabel(text);
 ### 裸指针释放后未置空
 
 ``` cpp
-if (widget_)
-  widget_->Xxx(...);
+widget_ = new Widget(...);
 ```
 
 ->
@@ -680,7 +732,7 @@ void OnWidgetDestroying(views::Widget* widget) {
 }
 ```
 
-### 接收 `const char*` 参数
+### 存储 `const char*` 参数
 
 ``` cpp
 const char* response_ = nullptr;
@@ -699,12 +751,35 @@ std::string response_;
 void OnResponse(const char* response) {
   if (response) {
     response_ = response;
-  } else {
-    response_ = "";
   }
   // ...
 }
 ```
+
+### printf 系列函数第一个参数传字符串本身
+
+如果字符串包含 % 就会出错
+
+### 指针强转
+
+``` cpp
+if (value) {
+  // no crash now, but risky for a long run.
+  return static_cast<StringValue*>(value)->ToString();
+}
+```
+
+->
+
+``` cpp
+if (value && value->IsStringValue()) {
+  return value->ToStringValue()->ToString();
+}
+```
+
+### 系统调用
+
+notice param: count vs bytes
 
 ## Chromium 问题
 
