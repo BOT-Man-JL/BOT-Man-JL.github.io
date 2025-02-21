@@ -52,4 +52,5 @@
 
 ## 参考
 
-- https://addyosmani.com/blog/software-engineering-soft-parts/#quote-41
+- https://addyosmani.com/blog/software-engineering-soft-parts/#mentoring
+- https://johnkwhitehead.ca/situational-leadership/
