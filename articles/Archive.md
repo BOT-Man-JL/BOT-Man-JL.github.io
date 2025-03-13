@@ -5,6 +5,7 @@
 
 #### 2025
 
+- [网页渲染导致浏览器卡顿的小故事](2025/Webview-Layer-Optimization.md)
 - [Windows 不依赖 Dump 解析调用栈的方案](2025/Parse-Stack-Without-Dump-on-Windows.md)
 - [逆向小故事之“破解 OBS”](2025/Reverse-Story-OBS.md)
 
