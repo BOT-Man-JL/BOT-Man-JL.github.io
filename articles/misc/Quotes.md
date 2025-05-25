@@ -36,7 +36,6 @@
 
 - 只懂得埋头苦干的人，是勤奋的，也是懒惰的——害怕改变，也懒得思考，选择最熟悉也最简单的方式，不断重复；哪怕想要做某件事，也不敢实践，因为一旦失败，就仿佛证实了能力真的不行。不改变，最坏的结果无非是维持现状，这样就可以一直停留在自己的自恋幻想里，不用承担现实的责任。面对生活，重要的不是治愈，而是带着遗憾活下去，并且勇敢地跟痛苦相处。对待生命你不妨大胆冒险一点, 因为最后你也要失去它。
 - 人会长大三次：第一次是在发现自己不是世界中心的时候；第二次是在发现即使再怎么努力，终究还是有些事令人无能为力的时候；第三次是在，明知道有些事可能会无能为力，但还是会尽力争取的时候。
-- 有勇气来改变可以改变的事情，有胸怀来接受不可改变的事情，有智慧来分辨两者的不同。——李开复
 - 今天很残酷，明天更残酷，后天很美好，但是大多数人死在明天晚上，看不到后天的太阳。——马云
 - 我们不能改变生命的长度，但可以改变其厚度。
 - 有时候，放弃比坚持更困难。
@@ -64,6 +63,7 @@
 - 不盲目骄傲，不刻意渺小。
 - 欲胜人者先自胜，欲卑人者先自卑。
 - 既要学会生活，又要学会工作。这叫先吃饱，再干活。——江平老师
+- God, grant me the serenity to accept the things that I cannot change, courage to change the things that I can, and wisdom to know the difference. —— Reinhold Niebuhr
 - Innovation distinguishes between a leader and a follower. —— Steve Jobs
 - Keep close to your friend, but your enemies closer. —— The Godfather
 - If you come to fame not understanding who you are, it will define who you are. —— Oprah Winfrey

@@ -732,6 +732,18 @@ void OnWidgetDestroying(views::Widget* widget) {
 }
 ```
 
+### 使用 `T*` 释放 `T[]*`
+
+``` cpp
+std::unique_ptr<BYTE> buffer(new BYTE[size]);
+```
+
+-> 使用 `delete[]` 是否内存，避免内存泄漏
+
+``` cpp
+std::unique_ptr<BYTE[]> buffer(new BYTE[size]);
+```
+
 ### 存储 `const char*` 参数
 
 ``` cpp
