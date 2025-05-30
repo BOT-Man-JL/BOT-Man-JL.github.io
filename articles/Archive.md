@@ -5,6 +5,7 @@
 
 #### 2025
 
+- [内存指标与基础概念](2025/Memory-Illustrated.md) 👍（转载）
 - [网页渲染导致浏览器卡顿的小故事](2025/Webview-Layer-Optimization.md)
 - [Windows 不依赖 Dump 解析调用栈的方案](2025/Parse-Stack-Without-Dump-on-Windows.md)
 - [逆向小故事之“破解 OBS”](2025/Reverse-Story-OBS.md)
@@ -25,7 +26,7 @@
 
 #### 2021
 
-- [一次 Chromium 性能优化 的“撞车”事故经历](2021/Chromium-Floating-Number-Crash.md)
+- [一次 Chromium 性能优化 的“撞车”事故经历](2021/Chromium-Floating-Number-Crash.md)（转载）
 - [一切皆可 调试](2021/Debug-Everywhere.md) 👍
 
 #### 2020
