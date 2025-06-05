@@ -1,8 +1,10 @@
 # Process Monitor 故事汇
 
-> 2023/10/29 -> 2024/8/11
+> 2023/10/29 -> 2025/6/5
 > 
 > 汇总借助 Process Monitor 分析的典型案例（持续更新中）
+
+[TOC]
 
 ## 介绍
 
@@ -121,7 +123,7 @@ DEL [/P] [/F] [/S] [/Q] [/A[[:]attributes]] names
 
 ![Name-Collision-Procexp](Process-Monitor-Cases/Name-Collision-Procexp.png)
 
-接着使用 Process Monitor 监控可疑进程 `java.exe` 的文件 I/O 行为，发现该进程结束前有一处从 `xxx.apk.apktool_tmp` 到 `xxx.apk` 的重命名失败操作：
+接着借助 Process Monitor 监控可疑进程 `java.exe` 的文件 I/O 行为，发现该进程结束前有一处从 `xxx.apk.apktool_tmp` 到 `xxx.apk` 的重命名失败操作：
 
 ![Name-Collision-Events](Process-Monitor-Cases/Name-Collision-Events.png)
 
@@ -137,7 +139,7 @@ DEL [/P] [/F] [/S] [/Q] [/A[[:]attributes]] names
 
 **分析**
 
-使用 Process Monitor 监控对应进程的文件 I/O 行为，发现该进程加载出错前 `MSVCP140D.dll` 文件一直找不到：
+借助 Process Monitor 监控对应进程的文件 I/O 行为，发现该进程加载出错前 `MSVCP140D.dll` 文件一直找不到：
 
 ![Missing-DLL-Events](Process-Monitor-Cases/Missing-DLL-Events.png)
 
@@ -146,6 +148,20 @@ DEL [/P] [/F] [/S] [/Q] [/A[[:]attributes]] names
 另外，可以使用 [Dependency Walker](https://www.dependencywalker.com/)（或重制版 [Dependencies](https://github.com/lucasg/Dependencies)）看到依赖的 DLL 能否正确加载：
 
 ![Missing-DLL-Dependencies](Process-Monitor-Cases/Missing-DLL-Dependencies.png)
+
+### 案例：中文路径编码错误
+
+**现象**
+
+某开源软件在中文用户名的环境下，点击某个按钮后立即闪退，而在英文用户名的环境下则没有问题。
+
+**分析**
+
+借助 Process Monitor 监控对应进程的文件 I/O 行为，发现该进程在点击按钮后，会访问带有用户名的路径。而如果用户名是中文，那么路径上的中文用户名部分就会变成 `?`，导致文件操作失败：
+
+![Invalid-Chinese-Filename](Process-Monitor-Cases/Invalid-Chinese-Filename.png)
+
+经过查看源码，发现其使用的是 C++ 的 `std::fstream` 读写文件，而没有处理好字符编码问题；另外，没有处理文件访问出错的情况，导致最终闪退。
 
 ## 写在最后
 
