@@ -111,6 +111,10 @@
 
 ## 笔记 | Notes
 
+#### 2025
+
+- [如何评估创业](2025/Startup-Evaluation.md)
+
 #### 2024
 
 - [桌面客户端基础](2024/PC-App-Basis.md)
