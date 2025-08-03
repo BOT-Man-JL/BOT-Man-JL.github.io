@@ -1,8 +1,23 @@
 # 逆向小故事之“破解 OBS”
 
-> 2025/1/11
+> 2025/1/11 -> 8/3
 > 
 > 记录一则“一切皆可调试”的小故事
+
+## 2025/8/3 更新
+
+微软官方文档已更新了 [`SetGPUThreadPriority`](https://learn.microsoft.com/en-us/windows/win32/api/dxgi/nf-dxgi-idxgidevice-setgputhreadpriority) 的 “隐藏模式” 的参数说明，大家不需要再逆向破解了（很开心）：
+
+![SetGPUThreadPriority-Updated](Reverse-Story-OBS/set_gpu_thread_priority_updated.png)
+
+![SetGPUThreadPriority-Remarks](Reverse-Story-OBS/set_gpu_thread_priority_remarks.png)
+
+根据文档描述，OBS 使用的 `0x4000001E` 参数对应的含义是 **最高线程优先级**：
+
+- Absolute Priority Mode
+- Hard Realtime - Used for extremely latency sensitive well bounded workloads. This priority does not yield to lower priorities.
+
+不过，所有程序都需要谨慎使用过高的优先级，否则没有差异化也就没有相对优先的意义了。
 
 ## 背景
 
