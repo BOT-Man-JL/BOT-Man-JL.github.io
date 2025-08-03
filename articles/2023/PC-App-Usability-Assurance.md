@@ -308,20 +308,20 @@
 指标：
 
 - 指标设计
-  - 内存大小分位数
-  - 内存峰值大小分位数
-  - 内存大小异常率（内存大小长时间超过 x MB）
+  - 内存占用分位数
+  - 内存峰值占用分位数
+  - 内存占用异常率（内存占用长时间超过 x MB）
   - 内存泄漏率
   - 内存泄漏速率（x MB/h）均值、分位数
   - 内存泄漏大小（x MB/轮次、x MB/人）均值、分位数
 - 类别维度
-  - 进程内存大小
+  - 进程内存
     - Windows: private working set（物理内存）、private bytes（虚拟内存）
     - macOS: physical footprint（虚拟内存）
   - 系统内存总量、余量
     - Windows: commit charge limit/total（虚拟内存）、physical memory（物理内存）
     - macOS: memory pressure（物理内存）、memory used（物理内存）
-  - JS Heap 大小、业务 Renderer 进程内存大小
+  - JS Heap 占用、业务 Renderer 进程内存占用
 - 详细内存概念参考 [内存指标与基础概念](https://www.ihewro.com/archives/1277/)
 
 归因：
@@ -340,7 +340,7 @@
 
 诊断：
 
-- Windows - WPR/[UIforETW](https://github.com/google/UIforETW) + WPA：记录、分析 内存申请与释放动作
+- Windows - WPR/[UIforETW](https://github.com/google/UIforETW) + WPA：记录、分析 内存申请与释放动作（注意：如果使用了 PartitionAlloc 等内存池分配机制，工具抓到的 VirutalAlloc 时机与业务代码申请内存时机不匹配；建议通过 hook 具体内存分配的函数重新实现类似工具）
 - Windows - vmmap：分析进程内存使用分布
 - Windows - rammap：分析系统内存使用分布
 - macOS - Instruments Allocations：记录、分析 内存申请与释放动作（注意：Instruments Leaks 针对 C++ 代码不准确、不可参考）
@@ -511,8 +511,8 @@
 指标：
 
 - 线上指标
-  - 本地缓存大小分位数
-  - 本地缓存异常率（磁盘占用大小超过 x MB）
+  - 本地缓存占用分位数
+  - 本地缓存异常率（磁盘占用超过 x MB）
   - 磁盘空间不足率（文件写入失败率）
 - 线下指标
   - 安装前的安装包大小
@@ -550,7 +550,7 @@
   - 如果样本极值差距在可控范围内（闭区间），可用 分位数、均值
   - 注意：统计时需要剔除 无需观测值（例如 某进程 CPU 使用率为 0 的样本）、异常值（例如 疑似脏数据的负数、极大值）；如果数据量过大，先采样再统计
 - 定时采样指标
-  - 例如：内存大小（单点取值）、CPU/GPU 使用率（区间差值）
+  - 例如：内存占用（单点取值）、CPU/GPU 使用率（区间差值）
   - 对于单点取值指标，直接使用单次采样结果
   - 对于区间差值指标，计算两次采样结果的差值，再除以采样间隔
   - 如果被采样对象（进程/线程/JS Context）不常驻，需要避免因为错过采集区间导致数据丢失或不准确
@@ -605,7 +605,7 @@
 ### 通用设备画像
 
 - 内存
-  - 大小
+  - 容量
   - 通道数
   - DDR 类型
   - 频率

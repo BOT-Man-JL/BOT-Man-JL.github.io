@@ -322,6 +322,11 @@ list(filter(
 
 最后，Python 的 **核心语言** _(core language)_ 还算 [比较简单](https://docs.python.org/3/reference/grammar.html)（反例：C++），很多概念都是 **良好定义** _(well-defined)_ 的 —— 只要理解基本原理，就能 **快速上手**（写本文时，我的 Python 代码量未超过 1,000 行）。
 
+> Python 语言的设计问题参考：
+>
+> - [Python 2 设计问题](https://docs.python.org/2/faq/design.html)
+> - [Python 3 设计问题](https://docs.python.org/3/faq/design.html)
+
 如果有什么问题，**欢迎交流**。😄
 
 Delivered under MIT License &copy; 2019, BOT Man
