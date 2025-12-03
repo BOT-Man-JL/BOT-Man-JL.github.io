@@ -21,3 +21,17 @@
     </a>
 </p>
 </div>
+
+<script>
+if (location.search.indexOf('text') != -1) {
+    search = location.search.substring(1);
+    var pairs = search.split("&");
+    for (var i = 0; i < pairs.length; i++) {
+        var kv = pairs[i].split("=");
+        if (kv[0] === "text" && kv[1]) {
+            document.getElementById('qrCodeCanvas').innerHTML = qrCodeSVG(decodeURIComponent(kv[1]), 320);
+            break;
+        }
+    }
+}
+</script>
