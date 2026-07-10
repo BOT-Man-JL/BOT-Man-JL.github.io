@@ -9,7 +9,7 @@
 > 1Rm（令吉）= 1.56RMB（人民币）
 
 | Time | Event |
-|------|--------|
+|------|-------|
 | 9/30 2:35-8:20 | Daxing -> KLIA T2 (Flight: D7343) |
 | 9/30 | KL (Stay: St. Regis) |
 | 10/1 | KL (Stay: Ibis City Centre) |

@@ -9,7 +9,7 @@
 > 1RMB（人民币） = 5B（泰铢）
 
 | Time | Event |
-|------|--------|
+|------|-------|
 | 3/30 2:30-8:50 | Daxing -> KLIA T2 (Flight: D7343) |
 | 3/30 13:30(+8)-13:55(+7) | KLIA T2 -> Krabi T1 (Flight: AK868) |
 | 3/30 | Krabi (Stay: Heritage Hotel) |

@@ -155,10 +155,16 @@
 
 ## 生活 | Life
 
+#### 2025
+
+- [印度尼西亚假日](2025/Holiday-in-Indonesia.md)
+- [俄罗斯假日](2025/Holiday-in-Russia.md)
+
 #### 2024
 
 - [一则“让你满意”的故事](2024/Story-of-Satisfaction.md)
 - [公路车骑行独库公路](2024/Duku-Ride.md)
+- [马来西亚假日 2](2024/Holiday-in-Malaysia-2.md)
 - [泰国假日 3](2024/Holiday-in-Thailand-3.md)
 
 #### 2023
