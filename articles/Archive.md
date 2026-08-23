@@ -84,6 +84,10 @@
 
 ## 分享 | Share
 
+#### 2026
+
+- [AI Agent Harness 增强技巧](2026/AI-Agent-Harness-Enhancement.md)
+
 #### 2023
 
 - [桌面客户端 品质保障](2023/PC-App-Usability-Assurance.md) 👍
