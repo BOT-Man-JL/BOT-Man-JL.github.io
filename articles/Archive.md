@@ -3,6 +3,10 @@
 
 ## 代码 | Coding
 
+#### 2026
+
+- [软件开发行业的 L3 时代](2026/L3-Era-of-Software-Development.md)
+
 #### 2025
 
 - [内存指标与基础概念](2025/Memory-Illustrated.md) 👍（转载）
